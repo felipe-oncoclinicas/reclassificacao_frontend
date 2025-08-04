@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   FileText,
@@ -23,14 +23,6 @@ const HeaderContent = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-`;
-
-const TableTitle = styled.div`
-   text-align: left;
-   padding-bottom: 10px;
-  font-weight: 800;
-  font-size: 22px;
-  color: #16a34a;
 `;
 
 const TableContainer = styled.div`
@@ -86,12 +78,10 @@ interface DataTableProps {
 export const DataTable = ({ activeTab }: DataTableProps) => {
   const [files, setFiles] = useState<FileData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [editingRowId, setEditingRowId] = useState<number | null>(null);
-  const [editValues, setEditValues] = useState<Partial<FileData>>({});
   const [editingCell, setEditingCell] = useState<{ id: number; field: keyof FileData } | null>(null);
   const [editValue, setEditValue] = useState<string | number>('');
 
-
+  console.log(activeTab, loading)
 
   const fetchData = async () => {
     setLoading(true);
@@ -101,16 +91,15 @@ export const DataTable = ({ activeTab }: DataTableProps) => {
   };
 
   const handleSaveEdit = async () => {
-  if (!editingCell) return;
+    if (!editingCell) return;
 
-  const updatedField = { [editingCell.field]: editValue };
-  await updateFile(editingCell.id, updatedField);
+    const updatedField = { [editingCell.field]: editValue };
+    await updateFile(editingCell.id, updatedField);
 
-  await fetchData();
-  setEditingCell(null);
-  setEditValue('');
-};
-
+    await fetchData();
+    setEditingCell(null);
+    setEditValue('');
+  };
 
   useEffect(() => {
     fetchData();
